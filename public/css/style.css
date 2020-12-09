@@ -1,0 +1,108 @@
+/* Lessons */
+
+.lesson_container{
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
+}
+
+.lesson_search{
+    max-width: 20%;
+}
+
+.hide{
+    display: none;
+}
+
+.lessons{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 80%;
+}
+
+.lesson-card{
+    width: 20rem;
+}
+
+.categories{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px 2em;
+}
+
+.category {
+    width: 20rem;
+}
+
+.new-topic{
+    text-align: right;
+    margin-bottom: 1em;
+}
+
+.topic_date {
+    font-size: x-small;
+}
+
+.card-footer {
+    text-align: right;
+}
+
+.lesson-properties{
+    display: flex;
+    justify-content: space-between;
+}
+
+.centred{
+    justify-content: center;
+    text-align: center;
+}
+
+.achieved{
+    color: orange;
+}
+
+.parts_navigation{
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+}
+
+.parts_navigation_part{
+    width: 25%;
+}
+
+.parts_navigation_buttons{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lesson_image{
+    max-width: 100%;
+}
+
+.lesson_element{
+    max-width: 80%;
+    margin: auto;
+    margin-bottom: 1em;
+}
+
+.lesson_table td, th{
+    border: 1px solid grey;
+    text-align: center;
+    padding: 0.5em;
+}
+
+.lesson_crumb{
+    width: 80%;
+    margin: auto;
+    border:1px solid black;
+}
+
+.lesson_crumb_part{
+    border: 1px solid orange;
+}

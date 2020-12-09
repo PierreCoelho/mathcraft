@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+    <div class="jumbotron">
+        <h1 class="display-4 text-center">Bienvenue sur MathCraft!</h1>
+        <p class="lead text-center">Viens apprendre et pratiquer les mathématiques en t'amusant.</p>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <a href="#"><img src="{{ asset('img/lesson_home.jpg') }}" class="rounded-circle mx-auto d-block" width="150"></a>
+                <p class="text-center">Des cours et des exercices pour tous les niveaux du collège.</p>
+                <p class="text-center">(En cours)</p>
+            </div>
+            <div class="col-lg-4">
+                <a href="#"><img src="{{ asset('img/forum_home.jpg') }}" class="rounded-circle mx-auto d-block" width="150"></a>
+                <p class="text-center">Un forum pour communiquer avec d'autres utilisateurs et s'entraider.</p>
+                <p class="text-center">(Disponible bientôt)</p>
+            </div>
+            <div class="col-lg-4">
+                <img src="{{ asset('img/game_home.jpg') }}" class="rounded-circle mx-auto d-block" width="150">
+                <p class="text-center">Un jeu vidéo pour pratiquer les différentes notions mathématiques du programme.</p>
+                <p class="text-center">(Disponible bientôt)</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="jumbotron">
+        <p class="text-center">Pour pouvoir profiter de l'expérience au maximum, il est préférable de te connecter.</p>
+        <p class="lead text-center">
+            <a class="btn btn-primary btn-sm" href="#" role="button">Se connecter</a>
+            <a class="btn btn-primary btn-sm" href="#" role="button">S'inscrire</a>
+        </p>
+    </div>
+
+{% endblock %}
