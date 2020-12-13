@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1>Forums</h1>
+
+    <div class="forums">
+        {% for forum in forums %}
+            <div class="card bg-light mb-3 forum">
+                <div class="card-header"></div>
+                <div class="card-body">
+                    <h4 class="card-title"><a href="{{ path('forum_forums', {'forum_slug': forum.slug }) }}">{{ forum.name |capitalize}}</a></h4>
+                    <p class="card-text">{{ forum.description }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

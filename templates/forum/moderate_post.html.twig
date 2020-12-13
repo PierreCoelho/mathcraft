@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Modération
+{% endblock %}
+
+{% block body %}
+
+    <h1>
+        Modération d'un message
+    </h1>
+
+    <hr>
+
+    <div class="container">
+        <h3>Message posté : </h3>
+
+        <hr>
+
+        <div class="card border-primary mb-3">
+            <div class="card-header d-flex justify-content-between">
+                <div>
+                    <div>par {{ post.author.username }}</div>
+                    <div>
+                        le {{ post.createdAt |date('d/m/Y \\à H:i') }}<br/>
+                        {% if post.editedAt != null %}
+                            édité le {{ post.editedAt |date('d/m/Y \\à H:i') }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="card-body topic">
+                <p class="card-text">{{ post.content | raw }}</p>                  
+            </div>
+        </div>
+
+        <h3>Modération :</h3>
+
+        <hr>
+
+        {{ form_start(moderateForm) }}
+
+        {{ form_row(moderateForm.moderateReason, {
+            'label' : 'Pourquoi ce message doit-il être modéré :',
+            'attr' : {
+                'placeholder' : 'Exemple : Ce message ne respecte pas les règles de politesse nécessaires à la bonne tenue de la discussion',
+                }
+            })
+        }}
+
+        <button type="submit" class="btn btn-primary">
+            Modérer le message
+        </button>
+
+        {{ form_end(moderateForm) }}
+    </div>
+
+{% endblock %}

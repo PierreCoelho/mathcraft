@@ -1,0 +1,145 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ forum.name |capitalize }}{% endblock %}
+
+{% block body %}
+
+    <h1>{{ forum.name |capitalize }}</h1>
+
+    <hr>
+
+    <div class="container">
+
+        {% if errorMessage %}
+            <div class="alert alert-dismissible alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <p><strong>Erreur :</strong> {{errorMessage}}</p>
+            </div>
+        {% endif %}
+        
+        <div class="alert alert-dismissible alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4 class="alert-heading">Quelques informations</h4>
+            <p class="mb-0">Avant de poster un message, assurez-vous d'avoir de respecter les quelques règles suivantes afin d'assurer le bon fonctionnement du forum</p>
+            <ul>    
+                <li>Si vous créez un nouveau sujet, assurez-vous d'abord que la réponse n'est pas déjà donnée dans un sujet antérieur.</li>
+                <li>Respectez les règles de politesse et de savoir vivre : Bonjour, cordialement, merci, ... Il est toujours plus facile d'obtenir une réponse à sa question en demandant poliment.<br/> <strong>Les insultes et moqueries sont formellement proscrites.</strong></li>
+                <li>Pensez à indiquer lorsqu'un message vous a été utile pour répondre à votre question en cliquant sur le bouton "Ce message m'a aidé". Cela permettra aux autre utilisateurs se posant les mêmes questions de trouver des réponses plus facilement.</li>
+                <li>Pensez à bien indiquer que votre sujet est résolu lorsque vous avez trouvé la réponse à votre question. Pour cela, il suffit de cliquer sur le bouton "Sujet résolu".</li>
+            </ul>
+        </div>
+
+        {% if app.user %}
+            <div class="new-topic">
+                <a type="button" class="btn btn-primary" href="{{ path('forum_new_thread', {'forum_slug': forum.slug}) }}">Nouveau sujet</a>
+            </div>
+        {% endif %}
+
+        <div>
+            <ul class="list-group">
+                {% for thread in threads %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="thread-title">
+                            {% if thread.solved %}
+                                <i class="fas fa-check-circle"></i>
+                            {% endif %}
+                            <a href="{{ path('forum_thread', {'forum_slug': forum.slug, 'thread_slug': thread.slug}) }}">{{ thread.title }}</a>
+                        </div>
+                        <div class="thread-info d-flex justify-content-between">
+                            <div class="thread-author">
+                                <div>Posté par </div>
+                                <div>{{ thread.author.username }}</div>
+                                <div>le {{ thread.createdAt |date('d/m/Y \\à H:i') }}</div>
+                            </div>
+                            <div class="thread-posts align-self-center">
+                                <p class="align-self-center">{{ thread.ForumPosts |length }} message{% if thread.ForumPosts |length > 1 %}s{% endif %}</p>
+                            </div>
+                            <div clas="thread-last-reply">
+                                <div>Dernier message par</div>
+                                <div>{{ thread.lastPostAuthor }}</div>
+                                <div>le {{ thread.lastPostCreatedAt |date('d/m/Y \\à H:i') }}</div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% if numberOfPages > 1 %}
+            <div class="paginator">
+                <div class="paginator_nav">
+                    {% if previous >= 0 %}
+                        {% if offset >= 2*paginatorPerPage %}
+                            <a href="{{ path('forum_forums', { 'forum_slug': forum.slug, offset: 0 }) }}"><i class="fas fa-fast-backward"></i></a>
+                        {% endif %}
+                        <a href="{{ path('forum_forums', { 'forum_slug': forum.slug, offset: previous }) }}"><i class="fas fa-step-backward"></i></a>
+                    {% endif %}
+                </div>
+
+                <div class="paginator_pages">
+                    {% if numberOfPages > 5 %}
+                        {% if currentPage-1 > 1 %}
+                            <p>...</p>
+                        {% endif %}
+
+                        {% if currentPage == 1 %}
+                            {% for i in 1..3 %}
+                                {% if i == currentPage %}
+                                    <p class="currentPage">{{i}}</p>
+                                {% else %}
+                                    <a href="{{ path('forum_forums', { 'forum_slug': forum.slug, offset: (i-1)*paginatorPerPage }) }}">{{i}}</a>
+                                {% endif %}
+                            {% endfor %}
+                        {% elseif currentPage == numberOfPages %}
+                            {% for i in currentPage-2..currentPage %}
+                                {% if i == currentPage %}
+                                    <p class="currentPage">{{i}}</p>
+                                {% else %}
+                                    <a href="{{ path('forum_forums', { 'forum_slug': forum.slug, offset: (i-1)*paginatorPerPage }) }}">{{i}}</a>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% for i in currentPage-1..currentPage+1 %}
+                                {% if i == currentPage %}
+                                    <p class="currentPage">{{i}}</p>
+                                {% else %}
+                                    <a href="{{ path('forum_forums', { 'forum_slug': forum.slug, offset: (i-1)*paginatorPerPage }) }}">{{i}}</a>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if currentPage+1 < numberOfPages-1  %}
+                            <p>...</p>
+                        {% endif %}
+                    {% else %}
+                        {% for i in 1..numberOfPages %}
+                            {% if i == currentPage %}
+                                <p class="currentPage">{{i}}</p>
+                            {% else %}
+                                <a href="{{ path('forum_forums', { 'forum_slug': forum.slug, offset: (i-1)*paginatorPerPage }) }}">{{i}}</a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="paginator_nav">
+                    {% if next < threads|length %}
+                        <a href="{{ path('forum_forums', { 'forum_slug': forum.slug, offset: next }) }}"><i class="fas fa-step-forward"></i></a>
+                        {% if offset+2*paginatorPerPage <= numberOfPages*paginatorPerPage %}
+                            <a href="{{ path('forum_forums', { 'forum_slug': forum.slug, offset: (numberOfPages-1)*paginatorPerPage }) }}"><i class="fas fa-fast-forward"></i></a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        
+
+        {% if app.user %}
+            <div class="new-topic">
+                <a type="button" class="btn btn-primary" href="#">Nouveau sujet</a>
+            </div>
+        {% endif %}
+
+    </div>
+
+{% endblock %}

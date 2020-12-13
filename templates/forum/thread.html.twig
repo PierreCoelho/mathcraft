@@ -1,0 +1,145 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ thread.title | capitalize }}{% endblock %}
+
+{% block body %}
+
+    <h1>{% if thread.solved %} <i class="fas fa-check-circle"></i> {% endif %} {{ thread.title |capitalize }}</h1>
+
+    <hr>
+
+    <div class="container">
+
+        {% if errorMessage %}
+            <div class="alert alert-dismissible alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <p><strong>Erreur :</strong> {{errorMessage}}</p>
+            </div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="new-topic">
+                {% if app.user == thread.author %}                        
+                    <a type="button" class="btn btn-info btn-sm" href="{{ path('forum_edit_thread', {'forum_slug': thread.forum.slug, 'thread_slug': thread.slug}) }}"><i class="far fa-edit"></i>Editer le sujet</a>
+                    {% if not thread.solved %}
+                        <a type="button" class="btn btn-success btn-sm" href="{{ path('forum_thread_solved', {'forum_slug': thread.forum.slug, 'thread_slug': thread.slug}) }}"><i class="fas fa-check-circle"></i> Sujet résolu</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% for post in posts %}
+
+            <div class="card {% if post.moderateReason is not empty %} border-warning {% else %} border-primary {% endif %} mb-3 {% if post.helpedSolve and post.moderateReason is empty %}bg-success text-white{% endif %}">
+                <div class="card-header d-flex justify-content-between">
+                    <div>
+                        <div>par {{ post.author.username }}</div>
+                        <div>
+                            le {{ post.createdAt |date('d/m/Y \\à H:i') }}<br/>
+                            {% if post.editedAt != null %}
+                                édité le {{ post.editedAt |date('d/m/Y \\à H:i') }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div>
+                        {% if app.user == post.author %}
+                            <a type="button" class="btn btn-info btn-sm" href="{{ path('forum_edit_post', {'forum_slug': thread.forum.slug, 'thread_slug': thread.slug, 'post_id': post.id}) }}"><i class="far fa-edit"></i>Editer</a>
+                        {% endif %}
+                        {% if app.user == thread.author and thread.author != post.author and not post.helpedSolve %}
+                            <a type ="button" class="btn btn-success btn-sm" href="{{ path('forum_post_helped_solve', {'forum_slug': thread.forum.slug, 'thread_slug': thread.slug, 'post_id': post.id}) }}"><i class="fas fa-check-circle"></i> Cette réponse m'a aidé</a>
+                        {% endif %}
+                        {% if is_granted('ROLE_MODERATOR') and app.user != post.author %}
+                            <a type ="button" class="btn btn-warning btn-sm" href="{{ path('forum_post_moderate', {'forum_slug': thread.forum.slug, 'thread_slug': thread.slug, 'post_id': post.id}) }}"><i class="fas fa-exclamation-triangle"></i>Modérer ce message</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body topic">
+                    <p class="card-text">
+                        {% if post.moderateReason is empty %}
+                            {{ post.content | raw }}
+                        {% else %}
+                            <strong>Ce message a été modéré pour la raison suivante : {{ post.moderateReason | raw }}</strong>
+                        {% endif %}
+                    </p>                  
+                </div>
+            </div>
+
+        {% endfor %}
+
+        {% if numberOfPages > 1 %}
+            <div class="paginator">
+                <div class="paginator_nav">
+                    {% if previous >= 0 %}
+                        {% if offset >= 2*paginatorPerPage %}
+                            <a href="{{ path('forum_thread', { 'forum_slug': forum.slug, 'thread_slug': thread.slug, offset: 0 }) }}"><i class="fas fa-fast-backward"></i></a>
+                        {% endif %}
+                        <a href="{{ path('forum_thread', { 'forum_slug': forum.slug, 'thread_slug': thread.slug, offset: previous }) }}"><i class="fas fa-step-backward"></i></a>
+                    {% endif %}
+                </div>
+
+                <div class="paginator_pages">
+                    {% if numberOfPages > 5 %}
+                        {% if currentPage-1 > 1 %}
+                            <p>...</p>
+                        {% endif %}
+
+                        {% if currentPage == 1 %}
+                            {% for i in 1..3 %}
+                                {% if i == currentPage %}
+                                    <p class="currentPage">{{i}}</p>
+                                {% else %}
+                                    <a href="{{ path('forum_thread', { 'forum_slug': forum.slug, 'thread_slug': thread.slug, offset: (i-1)*paginatorPerPage }) }}">{{i}}</a>
+                                {% endif %}
+                            {% endfor %}
+                        {% elseif currentPage == numberOfPages %}
+                            {% for i in currentPage-2..currentPage %}
+                                {% if i == currentPage %}
+                                    <p class="currentPage">{{i}}</p>
+                                {% else %}
+                                    <a href="{{ path('forum_thread', { 'forum_slug': forum.slug, 'thread_slug': thread.slug, offset: (i-1)*paginatorPerPage }) }}">{{i}}</a>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% for i in currentPage-1..currentPage+1 %}
+                                {% if i == currentPage %}
+                                    <p class="currentPage">{{i}}</p>
+                                {% else %}
+                                    <a href="{{ path('forum_thread', { 'forum_slug': forum.slug, 'thread_slug': thread.slug, offset: (i-1)*paginatorPerPage }) }}">{{i}}</a>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if currentPage+1 < numberOfPages-1  %}
+                            <p>...</p>
+                        {% endif %}
+                    {% else %}
+                        {% for i in 1..numberOfPages %}
+                            {% if i == currentPage %}
+                                <p class="currentPage">{{i}}</p>
+                            {% else %}
+                                <a href="{{ path('forum_thread', { 'forum_slug': forum.slug, 'thread_slug': thread.slug, offset: (i-1)*paginatorPerPage }) }}">{{i}}</a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="paginator_nav">
+                    {% if next < posts|length %}
+                        <a href="{{ path('forum_thread', { 'forum_slug': forum.slug, 'thread_slug': thread.slug, offset: next }) }}"><i class="fas fa-step-forward"></i></a>
+                        {% if offset+2*paginatorPerPage <= numberOfPages*paginatorPerPage %}
+                            <a href="{{ path('forum_thread', { 'forum_slug': forum.slug, 'thread_slug': thread.slug, offset: (numberOfPages-1)*paginatorPerPage }) }}"><i class="fas fa-fast-forward"></i></a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if app.user and not thread.solved %}
+            <div class="new-topic">
+                <a type="button" class="btn btn-primary" href="{{ path('forum_add_post', {'forum_slug': thread.forum.slug, 'thread_slug': thread.slug}) }}">Répondre au sujet</a>
+            </div>
+        {% endif %}
+        
+    </div>
+
+{% endblock %}

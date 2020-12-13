@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -36,6 +38,22 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ForumThread::class, mappedBy="author")
+     */
+    private $forumThreads;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ForumPost::class, mappedBy="author")
+     */
+    private $forumPosts;
+
+    public function __construct()
+    {
+        $this->forumThreads = new ArrayCollection();
+        $this->forumPosts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -108,5 +126,65 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|ForumThread[]
+     */
+    public function getForumThreads(): Collection
+    {
+        return $this->forumThreads;
+    }
+
+    public function addForumThread(ForumThread $forumThread): self
+    {
+        if (!$this->forumThreads->contains($forumThread)) {
+            $this->forumThreads[] = $forumThread;
+            $forumThread->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeForumThread(ForumThread $forumThread): self
+    {
+        if ($this->forumThreads->removeElement($forumThread)) {
+            // set the owning side to null (unless already changed)
+            if ($forumThread->getAuthor() === $this) {
+                $forumThread->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ForumPost[]
+     */
+    public function getForumPosts(): Collection
+    {
+        return $this->forumPosts;
+    }
+
+    public function addForumPost(ForumPost $forumPost): self
+    {
+        if (!$this->forumPosts->contains($forumPost)) {
+            $this->forumPosts[] = $forumPost;
+            $forumPost->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeForumPost(ForumPost $forumPost): self
+    {
+        if ($this->forumPosts->removeElement($forumPost)) {
+            // set the owning side to null (unless already changed)
+            if ($forumPost->getAuthor() === $this) {
+                $forumPost->setAuthor(null);
+            }
+        }
+
+        return $this;
     }
 }

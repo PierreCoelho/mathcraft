@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if editMode %}
+        Modification d'un sujet
+    {% else %}
+        Nouveau sujet
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+    <h1>
+        {% if editMode %}
+            Modification d'un sujet
+        {% else %}
+            Nouveau sujet
+        {% endif %}
+    </h1>
+
+    <div class="container">
+        {{ form_start(threadForm) }}
+
+        {{ form_row(threadForm.title, {
+            'label' : 'Titre du sujet :',
+            'attr' : {
+                'placeholder' : 'Exemple : Comment appliquer l\'égalité des produits en croix sans se tromper'
+                }
+            })
+        }}
+
+        {{ form_row(threadForm.firstPost.content, {
+            'label' : 'Votre message :',
+            'attr' : {
+                'placeholder' : 'Exemple :\n Bonjour,\n Je me rends compte que je me trompe régulièrement lorsque j\'applique l\'égalité des produits en croix.\n Auriez-vous des conseils pour éviter de se tromper ?\n Merci d\'avance.',
+                'rows': '10'
+                }
+            })
+        }}
+
+        <button type="submit" class="btn btn-primary">
+            {% if editMode %}
+                Enregistrer les modifications
+            {% else %}
+                Envoyer
+            {% endif %}
+        </button>
+
+        {{ form_end(threadForm) }}
+
+    </div>
+
+{% endblock %}

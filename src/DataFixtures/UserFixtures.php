@@ -27,15 +27,18 @@ class UserFixtures extends Fixture
         ));
         $manager->persist($user);
 
-        $user = new User();
-        $user->setUsername('pdasilva');
-        $user->setRoles(['ROLE_SUPER_ADMIN']);
-        $user->setPassword($this->passwordEncoder->encodePassword(
-            $user,
+        $admin = new User();
+        $admin->setUsername('pdasilva');
+        $admin->setRoles(['ROLE_SUPER_ADMIN']);
+        $admin->setPassword($this->passwordEncoder->encodePassword(
+            $admin,
             'Pierre93*'
         ));
-        $manager->persist($user);
+        $manager->persist($admin);
 
         $manager->flush();
+
+        $this->addReference('user-dummy', $user);
+        $this->addReference('user-admin', $admin);
     }
 }

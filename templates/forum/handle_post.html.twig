@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if editMode %}
+        Modification du message
+    {% else %}
+        Répondre au sujet
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+    <h1>
+        {% if editMode %}
+            Modification du message
+        {% else %}
+            Répondre au sujet
+        {% endif %}
+    </h1>
+
+	{{ form_start(postForm) }}
+
+    {{ form_row(postForm.content, {
+        'label' : 'Votre message :',
+        'attr' : {
+            'placeholder' : 'Exemple :\n Bonjour,\n Je me rends compte que je me trompe régulièrement lorsque j\'applique l\'égalité des produits en croix.\n Auriez-vous des conseils pour éviter de se tromper ?\n Merci d\'avance.',
+            'rows': '10'
+            }
+        })
+    }}
+
+	<button type="submit" class="btn btn-primary">
+        {% if editMode %}
+            Enregistrer les modifications
+        {% else %}
+            Répondre
+        {% endif %}
+    </button>
+
+	{{ form_end(postForm) }}
+
+{% endblock %}

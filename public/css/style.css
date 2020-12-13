@@ -1,3 +1,58 @@
+strong{
+    font-weight: bold;
+    font-style: italic;
+}
+
+/* Forum */
+
+.forums{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px 2em;
+}
+
+.forum{
+    width: 20rem;
+}
+
+.new-topic{
+    text-align: right;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+.thread-title{
+    width: 43%;
+}
+
+.thread-info{
+    width: 55%;
+}
+
+.paginator{
+    display: flex;
+    justify-content: space-around;
+    max-width: 50%;
+    margin: auto;
+    margin-top: 1em;
+}
+
+.currentPage{
+    color: red;
+}
+
+.paginator_nav{
+    display: flex;
+    justify-content: space-around;
+    width: 20%;
+}
+
+.paginator_pages{
+    display: flex;
+    justify-content: space-around;
+    width: 60%;
+}
+
 /* Lessons */
 
 .lesson_container{
@@ -24,25 +79,6 @@
 
 .lesson-card{
     width: 20rem;
-}
-
-.categories{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 10px 2em;
-}
-
-.category {
-    width: 20rem;
-}
-
-.new-topic{
-    text-align: right;
-    margin-bottom: 1em;
-}
-
-.topic_date {
-    font-size: x-small;
 }
 
 .card-footer {
