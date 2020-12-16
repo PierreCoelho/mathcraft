@@ -19,6 +19,31 @@
     </h1>
 
     <div class="container">
+
+        <div class="alert alert-dismissible alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4 class="alert-heading">Quelques informations pour la rédaction de votre message</h4>
+            <p class="mb-0">Voici quelques indications pour pouvoir taper des mathématiques dans un message sur le forum</p>
+            <ul>
+                <li>Les formules doivent être insérées entre les balises <code>\( \)</code></li>
+                <li>Pour écrire les additions et les soustraction, il suffit d'utiliser le symbole du clavier.<br/>
+                ex : <code>\( 8 + 5 \)</code> donne \( 8 + 5 \)</li>
+                <li>Pour les multiplications, il faudra écrire <code>\( a \times b \)</code><br/>
+                ex :  <code>\( 8 \times 3 \)</code> donne \( 8 \times 3 \) </li>
+                <li>Pour les divisions, il faudra écrire <code>\( a \div b \)</code><br/>
+                ex : <code> \( 5 \div 2 \)</code> donne \( 5 \div 2 \)</li>
+                <li>Pour écrire une fraction, il faut écrire <code>\( \dfrac{a}{b} \)</code><br/>
+                ex : <code> \( \dfrac{457}{13} \)</code> donne \( \dfrac{457}{13} \) </li>
+                <li>Pour écrire une racine carrée, il faut écrire <code>\( \sqrt{a} \)</code><br/>
+                ex :<code>\( \sqrt{48} \)</code> donne \( \sqrt{48} \)</li>
+                <li>Pour écrire une puissance, il faut écrire <code>\( a^b \)</code><br/>
+                ex : <code>\( x^3 \)</code> donne <code>\( x^3 \)</code></li>
+            </ul>
+            <p class="mb-0">On peut bien évidemment combiner plusieurs de ces écritures. </p>
+            <p>ex : <code>\( \dfrac{4 \times 5}{\sqrt{7}} \)</code> donne \( \dfrac{4 \times 5}{\sqrt{7}} \)</p>
+            <strong>N'hésite pas à copier-coller les balises ci-dessus pour t'aider à rédiger ton message.</strong>
+        </div>
+
         {{ form_start(threadForm) }}
 
         {{ form_row(threadForm.title, {
